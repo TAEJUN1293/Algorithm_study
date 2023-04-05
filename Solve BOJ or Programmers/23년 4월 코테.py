@@ -256,3 +256,200 @@ for number in range(10**6 + 1):
 print(answer)
 '''
 
+# 4/4
+'''
+### 2559 수열
+import sys
+input = sys.stdin.readline
+
+n, k = map(int, input().split())
+temperature = list(map(int, input().split()))
+
+value = sum(temperature[:k])
+answer = value
+for i in range(k, n):
+    value += temperature[i] - temperature[i-k]
+    answer = max(answer, value)
+print(answer)
+'''
+
+'''
+### 11728 배열 합치기
+import sys
+input = sys.stdin.readline
+
+n, m = map(int, input().split())
+a = list(map(int, input().split()))
+b = list(map(int, input().split()))
+
+answer = a + b
+answer.sort()
+print(*answer)
+'''
+
+'''
+### 2470 두 용액
+import sys
+input = sys.stdin.readline
+
+n = int(input())
+li = sorted(list(map(int, input().split())))
+
+left = 0
+right = n - 1
+
+value = 2e9 + 1
+answer = []
+
+while left < right:
+    left_val =  li[left]
+    right_val = li[right]
+    total = left_val + right_val
+    if abs(total) < value:
+        value = abs(total)
+        answer = [left_val, right_val]
+    if total < 0:
+        left += 1
+    else:
+        right -= 1
+print(*answer)
+'''
+
+'''
+# 4/5
+### 1238 파티
+import sys
+input = sys.stdin.readline
+import heapq
+
+n, m, x = map(int, input().split())
+graph = [[] for _ in range(n+1)]
+
+for _ in range(m):
+    start, end, time = map(int, input().split())
+    graph[start].append((end, time))
+
+def dijkstra(start):
+    total_time = [int(1e9)] * (n + 1)
+    heap = []
+    heapq.heappush(heap, (start, 0))
+    total_time[start] = 0
+    while heap:
+        node, time = heapq.heappop(heap)
+        if total_time[node] < time:
+            continue
+        for next_node, next_time in graph[node]:
+            if time + next_time < total_time[next_node]:
+                total_time[next_node] = time + next_time
+                heapq.heappush(heap, (next_node, time + next_time))
+    return total_time
+
+dist = [[]]
+for i in range(1, n+1):
+    dist.append(dijkstra(i))
+print(dist)
+answer = []
+for i in range(1, n+1):
+    answer.append(dist[i][x] + dist[x][i])
+print(max(answer))
+'''
+
+'''
+### 1504 특정한 최단 경로
+import sys
+input = sys.stdin.readline
+import heapq
+
+n, e = map(int, input().split())
+graph = [[] for _ in range(n+1)]
+for _ in range(e):
+    a, b, c = map(int, input().split())
+    graph[a].append((b, c))
+    graph[b].append((a, c))
+
+def dijkstra(start, end):
+    distance = [int(1e9)] * (n+1)
+    distance[start] = 0
+    heap = []
+    heapq.heappush(heap, (start, 0))
+    while heap:
+        node, dist = heapq.heappop(heap)
+        if distance[node] < dist:
+            continue
+        for next_node, next_dist in graph[node]:
+            if dist + next_dist < distance[next_node]:
+                distance[next_node] = dist + next_dist
+                heapq.heappush(heap, (next_node, dist + next_dist))
+    return distance[end]
+v1, v2 = map(int, input().split())
+
+path1 = dijkstra(1, v1) + dijkstra(v1, v2) + dijkstra(v2, n)
+path2 = dijkstra(1, v2) + dijkstra(v2, v1) + dijkstra(v1, n)
+
+if path1 >= int(1e9) and path2 >= int(1e9):
+    print(-1)
+else:
+    print(min(path1, path2))
+'''
+
+
+# 4/6
+'''
+### 13164 행복 유치원
+import sys
+input = sys.stdin.readline
+
+n, k = map(int, input().split())
+height = list(map(int, input().split()))
+
+answer = []
+for i in range(n-1):
+    answer.append(height[i+1] - height[i])
+answer.sort()
+print(sum(answer[:n-k]))
+'''
+
+'''
+### 19939 박 터뜨리기
+import sys
+input = sys.stdin.readline
+
+n, k = map(int, input().split())
+ball = [i for i in range(1, n+1)]
+
+min_ball = k * (k+1) / 2
+if min_ball > n:
+    print(-1)
+elif (n-min_ball) % k == 0:
+    print(k-1)
+else:
+    print(k)
+    
+'''
+
+'''
+### 21758 꿀 따기
+import sys
+input = sys.stdin.readline
+
+n = int(input())
+honey = list(map(int, input().split()))
+result = []
+result.append(honey[0])
+for i in range(1, n):
+    result.append(result[i-1] + honey[i])
+print(result)
+answer = 0
+# case1 꿀통 오른쪽 끝, 왼쪽 끝 벌, i번째 벌 위치
+for i in range(1, n-1):
+    answer = max(answer, result[n-1] - honey[0] - honey[i] + result[n-1] - result[i])
+# case2 꿀통 왼쪽끝, i번째 벌, 오른쪽 끝 벌 위치
+for i in range(1, n-1):
+    answer = max(answer, result[n-2] - honey[i] + result[i-1])
+# case3 꿀통 가운데, 왼쪽 끝, 오른쪽 끝 벌 위치
+for i in range(1, n-1):
+    answer = max(answer, result[n-2] - honey[0] + honey[i])
+print(answer)
+'''
+
+###
