@@ -452,4 +452,599 @@ for i in range(1, n-1):
 print(answer)
 '''
 
-###
+'''
+# 4/7
+### 2152 예산
+import sys
+input = sys.stdin.readline
+
+n = int(input())
+country = list(map(int, input().split()))
+m = int(input())
+start = 0
+end = max(country)
+
+while start <= end:
+    mid = (start + end) // 2
+    num = 0
+    for i in country:
+        if i >= mid:
+            num += mid
+        else:
+            num += i
+    if num <= m:
+        start = mid + 1
+    else:
+        end = mid - 1
+print(end)
+'''
+
+'''
+### 1068 트리
+import sys
+input = sys.stdin.readline
+
+n = int(input())
+tree = list(map(int, input().split()))
+m = int(input())
+
+def dfs(remove_node):
+    tree[remove_node] = -2
+    for i in range(n):
+        if tree[i] == remove_node:
+            dfs(i)
+dfs(m)
+answer = 0
+for i in range(n):
+    if tree[i] != -2 and i not in tree:
+        answer += 1
+print(answer)
+'''
+
+'''
+### 1967 트리의 지름
+import sys
+input = sys.stdin.readline
+
+n = int(input())
+graph = [[] for _ in range(n+1)]
+for _ in range(n-1):
+    a, b, c = map(int, input().split())
+    graph[a].append((b, c))
+    graph[b].append((a, c))
+distance = [-1] * (n+1)
+distance[1] = 0
+
+def dfs(node, dist):
+    for next_node, d in graph[node]:
+        if distance[next_node] == -1:
+            distance[next_node] = dist + d
+            dfs(next_node, dist + d)
+dfs(1, 0)
+start = distance.index(max(distance))
+distance = [-1] * (n+1)
+distance[start] = 0
+dfs(start, 0)
+print(max(distance))
+'''
+
+# 4/9
+'''
+### 2776 암기왕
+import sys
+input = sys.stdin.readline
+
+t = int(input())
+
+for _ in range(t):
+    n = int(input())
+    note1 = set(map(int, input().split()))
+    m = int(input())
+    note2 = list(map(int, input().split()))
+    for i in note2:
+        if i in note1:
+            print(1)
+        else:
+            print(0)
+'''
+
+'''
+### 2792 보석 상자
+import sys
+input = sys.stdin.readline
+
+n, m = map(int, input().split())
+jewel = []
+for _ in range(m):
+    jewel.append(int(input()))
+left = 1
+right = max(jewel)
+while left <= right:
+    mid = (left + right) // 2
+    person = 0
+    for i in jewel:
+        if i % mid == 0:
+            person += i // mid
+        else:
+            person += (i//mid) + 1
+    if person > n:
+        left = mid + 1
+    else:
+        right = mid - 1
+print(left)
+'''
+
+# 4/10
+'''
+li = [7, 12, 22, 34]
+del(li[2]) > 리스트에서 원소 제거 
+print(li) > 리턴값 출력 후 리스트에서 원소 제거
+#print(li.pop(2))
+'''
+
+'''
+def solution(park, routes):
+    r,c,R,C = 0,0,len(park),len(park[0]) # r,c : S위치 / R,C : 보드경계
+    move = {"E":(0,1),"W":(0,-1),"S":(1,0),"N":(-1,0)}
+    for i,row in enumerate(park): # 시작점 찾기
+        if "S" in row:
+            r,c = i,row.find("S")
+            break
+
+    for route in routes:
+        dr,dc = move[route[0]] # 입력받는 route의 움직임 방향
+        new_r,new_c = r,c # new_r,new_c : route 적용 후 위치
+        for _ in range(int(route[2])):
+            # 한칸씩 움직이면서, 보드 안쪽이고 "X"가 아니라면 한칸이동
+            if 0<=new_r+dr<R and 0<=new_c+dc<C and park[new_r+dr][new_c+dc] != "X":
+                new_r,new_c = new_r+dr,new_c+dc
+            else: # 아니라면 처음 위치로
+                new_r,new_c = r,c
+                break
+        r,c = new_r,new_c # 위치 업데이트
+
+    return [r,c]
+
+def solution(L, x):
+    answer = -1
+    left = 0
+    right = len(L)-1
+    while right >= left:
+        mid = (left+right)//2
+        if L[mid] == x:
+            return mid
+        elif L[mid] > x:
+            right = mid-1
+        else:
+            left = mid+1
+    return answer
+'''
+'''
+# Single LinkedList - Dummy node 구현
+class Node:
+    def __init__(self, item):
+        self.data = item
+        self.next = None
+
+class LinkedList:
+    # 객체 생성
+    def __init__(self):
+        self.nodeCount = 0
+        self.head = None
+        self.tail = None
+    # 리스트를 print로 출력할 때
+    def __repr__(self):
+        if self.nodeCount == 0:
+            return 'LinkedList: empty'
+        s = ''
+        curr = self.head
+        while curr is not None:
+            s += repr(curr.data)
+            if curr.next is not None:
+                s += ' -> '
+            curr = curr.next
+        return s
+    # 연결리스트 내 pos 번째 노드 찾기
+    def getAt(self, pos):
+        # 범위 벗어나면 None 리턴
+        if pos < 1 or pos > self.nodeCount:
+            return None
+        # 1부터 탐색 진행하여 찾기
+        i = 1
+        curr = self.head
+        while i < pos:
+            curr = curr.next
+            i += 1
+        return curr
+    # 연결 리스트 내 데이터를 리스트로 반환
+    def traverse(self):
+        # 빈 리스트 초기화
+        result = []
+        # Head부터 시작하여
+        curr = self.head
+        # 다음 위치가 None이 아닐때까지 반복
+        while curr:
+            result.append(curr.data)
+            curr = curr.next
+        return result
+
+    def insertAt(self, pos, newNode):
+        # pos 범위 만족 못하면 False
+        if pos < 1 or pos > self.nodeCount + 1:
+            return False
+        if pos == 1:
+            newNode.next = self.head
+            self.head = newNode
+        else:
+            if pos == self.nodeCount + 1:
+                prev = self.tail
+            else:
+                prev = self.getAt(pos - 1)
+            newNode.next = prev.next
+            prev.next = newNode
+        if pos == self.nodeCount + 1:
+            self.tail = newNode
+        self.nodeCount += 1
+
+    def popAt(self, pos):
+        # 주어진 범위 아니면 False
+        if pos < 1 or pos > self.nodeCount:
+            return False
+        # 삭제할 노드가 Head면
+        if pos == 1:
+            remove_node = self.head
+            self.head = self.head.next
+            self.nodeCount -= 1
+            if not self.nodeCount:
+                self.tail = None
+            return remove_node.data
+        # Head가 아닌 경우
+        else:
+            prev = self.getAt(pos - 1)
+            remove_node = prev.next
+            prev.next = remove_node.next
+            if pos == self.nodeCount:
+                self.tail = prev
+            self.nodeCount -= 1
+            return remove_node.data
+a = Node(67)
+b = Node(34)
+c = Node(28)
+L = LinkedList()
+print(L)
+L.insertAt(1, a)
+L.insertAt(2, b)
+L.insertAt(1, c)
+print(L)
+def solution(x):
+    return 0
+'''
+'''
+# 4/11
+# DoublyLinkedList 구현 (head, tail에 dummy 노드 구현)
+class Node:
+    def __init__(self, item):
+        self.data = item
+        self.prev = None
+        self.next = None
+# 양방향 빈 연결리스트 생성
+class DoublyLinkedList:
+    def __init__(self):
+        self.nodeCount = 0
+        self.head = Node(None)
+        self.tail = Node(None)
+        self.head.prev = None
+        self.head.next = self.tail
+        self.tail.prev = self.head
+        self.tail.next = None
+
+    def __repr__(self):
+        if self.nodeCount == 0:
+            return 'LinkedList: empty'
+        s = ''
+        curr = self.head
+        while curr.next.next:
+            curr = curr.next
+            s += repr(curr.data)
+            if curr.next.next is not None:
+                s += ' -> '
+        return s
+
+    def getLength(self):
+        return self.nodeCount
+    # 리스트 순회 (빈 리스트는 진행 X)
+    def traverse(self):
+        result = []
+        curr = self.head
+        while curr.next.next:
+            curr = curr.next
+            result.append(curr.data)
+        return result
+    # 리스트 역순회 (빈 리스트는 진행 X)
+    def reverse(self):
+        result = []
+        curr = self.tail
+        while curr.prev.prev:
+            curr = curr.prev
+            result.append(curr.data)
+        return result
+    # pos번째 노드 (특정 원소 얻기)
+    def getAt(self, pos):
+        if pos < 0 or pos > self.nodeCount:
+            return None
+        # 효율성 극대화 위해 절반으로 나누어 이분탐색 진행
+        # 노드 수 절반 기준 tail에 가까우므로 curr을 tail에 놓고 탐색
+        if pos > self.nodeCount // 2:
+            i = 0
+            curr = self.tail
+            while i < self.nodeCount - (pos - 1):
+                curr = curr.prev
+                i += 1
+        # 노드 수 기준 head에 가까우므로 head에 놓고 탐색 진행
+        else:
+            i = 0
+            curr = self.head
+            while i < pos:
+                curr = curr.next
+                i += 1
+        return curr
+    # 특정 노드 이후에 원소 삽입
+    def insertAfter(self, prev, newNode):
+        next = prev.next
+        newNode.prev = prev
+        newNode.next = next
+        prev.next = newNode
+        next.prev = newNode
+        self.nodeCount += 1
+        return True
+    # 특정 위치에 노드 삽입
+    def insertAt(self, pos, newNode):
+        if pos < 1 or pos > self.nodeCount + 1:
+            return False
+        prev = self.getAt(pos - 1)
+        return self.insertAfter(prev, newNode)
+    # 역방향 순회하며 노드 삽입
+    def insertBefore(self, next, newNode):
+        prev = next.prev
+        newNode.prev = prev
+        newNode.next = next
+        prev.next = newNode
+        next.prev = newNode
+        self.nodeCount += 1
+        return True
+    # 이전 노드 다음 노드 삭제
+    def popAfter(self, prev):
+        if prev.next == self.tail:
+            return None
+        remove_node = prev.next
+        next = remove_node.next
+        prev.next = next
+        next.prev = prev
+        self.nodeCount -= 1
+        return remove_node.data
+    # next 이전 노드 삭제
+    def popBefore(self, next):
+        if next.prev == self.head:
+            return None
+        remove_node = next.prev
+        prev = remove_node.prev
+        prev.next = next
+        next.prev = prev
+        self.nodeCount -= 1
+        return remove_node.data
+    # 특정(pos번째) 위치 노드 삭제
+    def popAt(self, pos):
+        if pos < 1 or pos > self.nodeCount:
+            return False
+        prev = self.getAt(pos - 1)
+        return self.popAfter(prev)
+    # 양방향 리스트 병합
+    def concat(self, L):
+        self.tail.prev.next = L.head.next
+        L.head.next.prev = self.tail.prev
+        if L.tail:
+            self.tail = L.tail
+        self.nodeCount += L.nodeCount
+'''
+
+'''
+# 스택 구현
+import sys
+import os
+sys.path.append('C:/Users/wnrrh/PycharmProjects/Algorithm_study/DevCourse')
+import doublylinkedlist
+from doublylinkedlist import Node
+from doublylinkedlist import DoublyLinkedList
+
+class ArrayStack:
+	# 빈 리스트 생성
+	def __init__(self):
+		self.data = []
+	# 리스트 크기 구하기
+	def size(self):
+		return len(self.data)
+	# 비어있나 여부 확인
+	def isEmpty(self):
+		return self.size() == 0
+	# item을 리스트에 추가
+	def push(self, item):
+		self.data.append(item)
+	# 리스트 내 젤 뒤에 원소 삭제
+	def pop(self):
+		return self.data.pop()
+	# 제일 뒤에 원소 찾기
+	def peek(self):
+		return self.data[-1]
+# 양방향 연결리스트로 스택 구현
+class LinkedListStack:
+	# 연결리스트 생성
+	def __init__(self):
+		self.data = DoublyLinkedList()
+	# 길이 구하기
+	def size(self):
+		return self.data.getLength()
+	# 비어있나 여부 확인
+	def isEmpty(self):
+		return self.size() == 0
+	# 연결리스트에 item 원소 추가 (append 대신 기존 작성한 함수로 구현)
+	def push(self, item):
+		node = Node(item)
+		self.data.insertAt(self.size() + 1, node)
+	# op대신 기존에 작성한 함수로 구현 (제일 뒤에 원소 삭제)
+	def pop(self):
+		return self.data.popAt(self.size())
+	# 기존 함수로 구현 (제일 뒤 원소 찾기)
+	def peek(self):
+		return self.data.getAt(self.size()).data
+prec = {
+    '*': 3, '/': 3,
+    '+': 2, '-': 2,
+    '(': 1
+}
+def solution(S):
+    opStack = ArrayStack()
+    answer = ''
+    for i in S:
+        # 알파벳이면 answer에 추가
+        if i not in prec and i != ')':
+            answer += i
+        # 괄호로 시작하는 경우
+        elif i == '(':
+            opStack.push(i)
+        # 괄호 닫는 경우
+        elif i == ')':
+            # opStack에 저장된 끝자리가 (가 올때까지 answer 에 연산 더해주기
+            while opStack.peek() != '(':
+                answer += opStack.pop()
+            # (차례에서 조건 끝나면서 opStack에서 '(' pop해주기
+            opStack.pop()
+        # 남은 연산 *, /, +, - 인 경우
+        else:
+            # opStack에 (가 있으면서 연산 더 높은 *,/ 라면
+            while not opStack.isEmpty() and prec[opStack.peek()] >= prec[i]:
+                answer += opStack.pop()
+            # 이외의 연산들은 opStack에 추가
+            opStack.push(i)
+    # opStack에 연산이 남았으면
+    while not opStack.isEmpty():
+        answer += opStack.pop()
+    return answer
+S = "(A+B)*(C+D)"
+print(solution(S))
+'''
+# 기본 라이브러리
+'''
+import sys
+import os
+sys.path.append('C:/Users/wnrrh/PycharmProjects/Algorithm_study/DevCourse')
+import doublylinkedlist
+from doublylinkedlist import Node
+from doublylinkedlist import DoublyLinkedList
+
+# 스택 구현
+# 빈 리스트로 스택 생성
+class ArrayStack:
+    def __init__(self):
+        self.data = []
+	# 길이 출력하는 함수
+    def size(self):
+        return len(self.data)
+	# 비어있나 여부 확인
+    def isEmpty(self):
+        return self.size() == 0
+	# 스택에 item 추가
+    def push(self, item):
+        self.data.append(item)
+	# 스택에서 젤 끝 원소 제거
+    def pop(self):
+        return self.data.pop()
+	# 스택 젤 마지막 원소 찾기
+    def peek(self):
+        return self.data[-1]
+
+# 주어진 문자열 exprStr split하여 끊어서 리스트로 표현
+def splitTokens(exprStr):
+    tokens = []
+    val = 0
+    valProcessing = False
+    for c in exprStr:
+        if c == ' ':
+            continue
+        if c in '0123456789':
+            val = val * 10 + int(c)
+            valProcessing = True
+        else:
+            if valProcessing:
+                tokens.append(val)
+                val = 0
+            valProcessing = False
+			# 괄호, 연산 추가
+            tokens.append(c)
+    # 마지막 숫자 추가
+    if valProcessing:
+        tokens.append(val)
+    return tokens
+# 후위표현식으로 연산자, 피연산자 순서대로 늘어놓게 만들기
+def infixToPostfix(tokenList):
+    prec = {
+        '*': 3,
+        '/': 3,
+        '+': 2,
+        '-': 2,
+        '(': 1,
+    }
+
+    opStack = ArrayStack()
+    postfixList = []
+    for i in tokenList:
+        if type(i) is int:
+            postfixList.append(i)
+        elif i == '(':
+            opStack.push(i)
+        elif i == ')':
+            while opStack.peek() != '(':
+                postfixList.append(opStack.pop())
+            opStack.pop()
+        else:
+            while not opStack.isEmpty() and prec[opStack.peek()] >= prec[i]:
+                postfixList.append(opStack.pop())
+            opStack.push(i)
+    while not opStack.isEmpty():
+        postfixList.append(opStack.pop())
+    return postfixList
+
+# 후위표기로 변환된 리스트 연산하기
+def postfixEval(tokenList):
+	# 빈 스택 생성
+    valStack = ArrayStack()
+    for i in tokenList:
+		# 숫자면 valStack에 push
+        if type(i) is int:
+            valStack.push(i)
+		# 숫자가 아니고 연산인 경우
+        else:
+			# pop 2번 진행해 숫자 뽑고 각 연산 진행한 이후 연산한 값 다시 push
+            b = valStack.pop()
+            a = valStack.pop()
+            if i == '*':
+                valStack.push(a*b)
+            elif i == '/':
+                valStack.push(a/b)
+            elif i == '+':
+                valStack.push(a+b)
+            elif i == '-':
+                valStack.push(a-b)
+	# size 계산해 1이상이면 pop 아니면 None 처리
+    if valStack.size() >= 1:
+        return valStack.pop()
+    else:
+        return None
+
+def solution(expr):
+    tokens = splitTokens(expr)
+    postfix = infixToPostfix(tokens)
+    print(postfix)
+    val = postfixEval(postfix)
+    return val
+'''
+
