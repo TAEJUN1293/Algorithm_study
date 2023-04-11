@@ -1048,3 +1048,40 @@ def solution(expr):
     return val
 '''
 
+### 1976 여행가자
+import sys
+input = sys.stdin.readline
+
+n = int(input())
+m = int(input())
+graph = [list(map(int, input().split())) for _ in range(n)]
+route = list(map(int, input().split()))
+parent = [i for i in range(n+1)]
+
+def find(x):
+    if parent[x] != x:
+        return find(parent[x])
+    return x
+def union(a, b):
+    a = find(a)
+    b = find(b)
+    if a > b:
+        parent[a] = b
+    else:
+        parent[b] = a
+
+for i in range(n):
+    for j in range(n):
+        if graph[i][j] == 1:
+            union(i+1, j+1)
+
+start = find(route[0])
+check = True
+for i in route:
+    if start != find(i):
+        check = False
+        break
+if check:
+    print('YES')
+else:
+    print('NO')
