@@ -1047,7 +1047,8 @@ def solution(expr):
     val = postfixEval(postfix)
     return val
 '''
-
+'''
+#4/11
 ### 1976 여행가자
 import sys
 input = sys.stdin.readline
@@ -1085,3 +1086,316 @@ if check:
     print('YES')
 else:
     print('NO')
+    
+'''
+'''
+# 4/12
+### 1707 이분 그래프
+import sys
+input = sys.stdin.readline
+from collections import deque
+
+def bfs(start):
+    queue = deque([start])
+    visited[start] = 1
+    while queue:
+        x = queue.popleft()
+        for i in graph[x]:
+            if not visited[i]:
+                queue.append(i)
+                visited[i] = -1 * visited[x]
+            elif visited[i] == visited[x]:
+                return False
+    return True
+
+k = int(input())
+for _ in range(k):
+    v, e = map(int, input().split())
+    graph = [[] for _ in range(v+1)]
+    visited = [0] * (v+1)
+    for _ in range(e):
+        u, v = map(int, input().split())
+        graph[u].append(v)
+        graph[v].append(u)
+    for i in range(1, v+1):
+        if not visited[i]:
+            answer = bfs(i)
+            if not answer:
+                break
+    if answer:
+        print('YES')
+    else:
+        print('NO')
+'''
+
+'''
+# 4/14
+
+### 23971 ZOAC 4
+
+import sys
+input = sys.stdin.readline
+import math
+
+h, w, n, m = map(int, input().split())
+height = math.ceil(h/(n+1))
+width = math.ceil(w/(m+1))
+print(height*width)
+'''
+
+'''
+### 5073 삼각형과 세 변
+import sys
+input = sys.stdin.readline
+
+while True:
+    a, b, c = map(int, input().split())
+    if a == 0 and b == 0 and c == 0:
+        break
+    k = max(a, b, c)
+    if a == b == c:
+        print('Equilateral')
+    elif k >= (a+b+c - k):
+        print('Invalid')
+    elif a != b and b != c and c!= a:
+        print('Scalene')
+    elif (a == b and a!= c) or (b == c and c!= a) or (c == a and a != b):
+        print('Isosceles')
+'''
+'''
+### 2292 벌집
+import sys
+input = sys.stdin.readline
+
+n = int(input())
+a = 1
+d = 6
+answer = 1
+while n > a:
+    answer += 1
+    a += d
+    d += 6
+print(answer)
+'''
+
+'''
+### 1157 단어 공부
+import sys
+input = sys.stdin.readline
+
+alphabet = input().upper().rstrip()
+word = list(set(alphabet))
+li = []
+for i in word:
+    cnt = alphabet.count(i)
+    li.append(cnt)
+if li.count(max(li)) > 1:
+    print('?')
+else:
+    maxidx = li.index(max(li))
+    print(word[maxidx])
+'''
+
+'''
+### 11723 집합
+import sys
+input = sys.stdin.readline
+m = int(input())
+s = set()
+for i in range(m):
+    command = input().rstrip().split()
+    if len(command) == 1:
+        if command[0] == 'all':
+            s = set([i for i in range(1, 21)])
+        else:
+            s = set()
+    else:
+        comm, num = command[0], command[1]
+        num = int(num)
+        if comm == 'add':
+            s.add(num)
+        elif comm == 'remove':
+            s.discard(num)
+        elif comm == 'check':
+            if num in s:
+                print(1)
+            else:
+                print(0)
+        elif comm == 'toggle':
+            if num in s:
+                s.discard(num)
+            else:
+                s.add(num)
+'''
+
+'''
+### 13305 주유소
+import sys
+input = sys.stdin.readline
+
+n = int(input())
+roads = list(map(int, input().split()))
+cost = list(map(int, input().split()))
+
+price = cost[0]
+answer = 0
+for i in range(n-1):
+    if price > cost[i]:
+        price = cost[i]
+    answer += price * roads[i]
+    print(answer)
+'''
+
+'''
+### 20920 영단어 암기는 괴로워
+import sys
+input = sys.stdin.readline
+n, m = map(int, input().split())
+dic = {}
+for _ in range(n):
+    word = input().rstrip()
+    if len(word) < m:
+        continue
+    if word in dic:
+        dic[word][0] += 1
+    else:
+        dic[word] = [1, len(word), word]
+answer = sorted(dic.items(), key = lambda x: (-x[1][0], -x[1][1], x[1][2]))
+for i in answer:
+    print(i[0])
+'''
+
+'''
+### 2075 N번째 큰 수
+import sys
+input = sys.stdin.readline
+import heapq
+
+n = int(input())
+heap = []
+for i in range(n):
+    number = list(map(int, input().split()))
+    if not heap:
+        for num in number:
+            heapq.heappush(heap, num)
+
+    else:
+        for num in number:
+            if heap[0] < num:
+                heapq.heappush(heap, num)
+                heapq.heappop(heap)
+print(heap[0])
+'''
+'''
+### 21921 블로그
+import sys
+input = sys.stdin.readline
+
+n, x = map(int, input().split())
+day = list(map(int, input().split()))
+
+if max(day) == 0:
+    print('SAD')
+else:
+    visitor = sum(day[:x])
+    max_visit = visitor
+    cnt = 1
+    for i in range(x, n):
+        visitor += day[i]
+        visitor -= day[i-x]
+        if visitor > max_visit:
+            max_visit = visitor
+            cnt = 1
+        elif visitor == max_visit:
+            cnt += 1
+    print(max_visit)
+    print(cnt)
+'''
+
+'''
+# 4/17
+### 10431 줄세우기
+import sys
+input = sys.stdin.readline
+
+t = int(input())
+for _ in range(t):
+    line = list(map(int, input().rstrip().split()))
+    cnt = 0
+    for i in range(1, len(line)-1):
+        for j in range(i+1, len(line)):
+            if line[i] > line[j]:
+                line[i], line[j] = line[j], line[i]
+                cnt += 1
+    print(line[0], cnt)
+'''
+
+
+'''
+### 13460 구슬 탈출 2
+import sys
+input = sys.stdin.readline
+from collections import deque
+
+n, m = map(int, input().split())
+dx = [-1, 1, 0, 0]
+dy = [0, 0, -1, 1]
+# 빨간구슬, 파란구슬 위치 총 4번
+visited = [[[[0]*m for _ in range(n)] for _ in range(m)] for _ in range(n)]
+# 그래프 입력넣고 빨간구슬, 파란구슬 각 시작점 정하기
+graph = [list(input().rstrip()) for _ in range(n)]
+for i in range(n):
+    for j in range(m):
+        if graph[i][j] == 'R':
+            rx, ry = i, j
+            graph[i][j] = '.'
+        elif graph[i][j] == 'B':
+            bx, by = i, j
+            graph[i][j] = '.'
+# 기울이는 순간 벽의 끝으로 이동하는 함수 생성
+def move(x, y, dx, dy):
+    move_cnt = 0
+    while graph[x+dx][y+dy] != '#' and graph[x][y] != 'O':
+        x += dx
+        y += dy
+        move_cnt += 1
+    return x, y, move_cnt
+
+def bfs():
+    queue = deque()
+    queue.append((rx, ry, bx, by, 1))
+    visited[rx][ry][bx][by] = 1
+    while queue:
+        red_x, red_y, blue_x, blue_y, cnt = queue.popleft()
+        # 구슬 이동이 10번 이상이면 중단
+        if cnt > 10:
+            break
+        # 각 구슬 별 상하좌우 탐색 진행
+        for i in range(4):
+            nrx, nry, rmove = move(red_x, red_y, dx[i], dy[i])
+            nbx, nby, bmove = move(blue_x, blue_y, dx[i], dy[i])
+            # 파란구슬이 구멍에 들어가지 않았다는 조건 하에
+            if graph[nbx][nby] != 'O':
+                # 빨간구슬이 구멍에 들어가면 벽 기울인 횟수 cnt 리턴
+                if graph[nrx][nry] == 'O':
+                    return cnt
+                # 빨간구슬, 파란구슬 같은 위치인 경우
+                if nrx == nbx and nry == nby:
+                    # 더 많이 기울인 구슬을 골라 해당 구슬의 위치를 이전으로 돌리기
+                    if rmove > bmove:
+                        nrx -= dx[i]
+                        nry -= dy[i]
+                    else:
+                        nbx -= dx[i]
+                        nby -= dy[i]
+                # 방문하지 않았던 곳에 한해 queue에 삽입하고 방문처리
+                if not visited[nrx][nry][nbx][nby]:
+                    visited[nrx][nry][nbx][nby] = 1
+                    queue.append((nrx, nry, nbx, nby, cnt + 1))
+    return -1
+print(bfs())
+'''
+
+
+# 4/18
+
