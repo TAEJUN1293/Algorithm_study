@@ -1398,4 +1398,133 @@ print(bfs())
 
 
 # 4/18
+'''
+### 8979 올림픽
+import sys
+input = sys.stdin.readline
 
+n, k = map(int, input().split())
+rank = []
+for _ in range(n):
+    rank.append(list(map(int, input().split())))
+rank.sort(key = lambda x : (x[1], x[2], x[3]), reverse = True)
+for i in range(n):
+    if rank[i][0] == k:
+        idx = i
+print(rank)
+for i in range(n):
+    if rank[idx][1:] == rank[i][1:]:
+        print(i+1)
+        break
+'''
+
+
+'''
+### 20006 랭킹전 대기록
+import sys
+input = sys.stdin.readline
+
+p, m = map(int, input().split())
+rooms = []
+for _ in range(p):
+    level, nickname = input().rstrip().split()
+    level = int(level)
+    if not rooms:
+        rooms.append([[level, nickname]])
+        continue
+    check = False
+    for room in rooms:
+        if len(room) < m and room[0][0]-10 <= level <= room[0][0]+10:
+            room.append([level, nickname])
+            check = True
+            break
+    if not check:
+        rooms.append([[level, nickname]])
+for room in rooms:
+    room.sort(key = lambda x: x[1])
+for room in rooms:
+    if len(room) == m:
+        print('Started!')
+    else:
+        print('Waiting!')
+    for l, n in room:
+        print(l, n)
+'''
+
+'''
+### 15989 1,2,3 더하기 4
+import sys
+input = sys.stdin.readline
+dp = [1]*10001
+for i in range(2, 10001):
+    dp[i] += dp[i-2]
+print(dp[5])
+for i in range(3, 10001):
+    dp[i] += dp[i-3]
+print(dp[5])
+t = int(input())
+for _ in range(t):
+    n = int(input())
+    print(dp[n])
+'''
+
+'''
+### 13549 숨바꼭질 3
+import sys
+input = sys.stdin.readline
+from collections import deque
+
+n, k = map(int, input().split())
+def bfs(n, k):
+    visited = [0] * 100001
+    queue = deque()
+    queue.append(n)
+    while queue:
+        x = queue.popleft()
+        if x == k:
+            return visited[k]
+        for next in (x-1, x+1 ,2*x):
+            if 0<=next<100001 and not visited[next]:
+                if next == 2*x and next != 0:
+                    visited[next] = visited[x]
+                    queue.appendleft(next)
+                else:
+                    visited[next] = visited[x] + 1
+                    queue.append(next)
+print(bfs(n, k))
+'''
+
+'''
+### 20055 컨베이어 벨트 위의 로봇
+import sys
+input = sys.stdin.readline
+from collections import deque
+
+n, k = map(int ,input().split())
+belt = deque(map(int, input().split()))
+robot = deque([0]*n)
+answer = 0
+
+while True:
+    belt.rotate(1)
+    robot.rotate(1)
+    robot[-1] = 0
+    if sum(robot):
+        for i in range(n-2, -1, -1):
+            if robot[i] == 1 and robot[i+1] == 0 and belt[i+1] >= 1:
+                robot[i] = 0
+                robot[i+1] = 1
+                belt[i+1] -= 1
+        robot[-1] = 0
+    if robot[0] == 0 and belt[0] >= 1:
+        robot[0] = 1
+        belt[0] -= 1
+    answer += 1
+    if belt.count(0) >= k:
+        break
+print(answer)
+'''
+
+
+## 4/19
+###
